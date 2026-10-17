@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nihongo — Học Tiếng Nhật Từ Gốc</title>
+  <style>
+    :root {
+      --bg-page: #eef6ff;
+      --bg-card: #ffffff;
+      --bg-soft: #f0fdfa;
+      --teal-main: #0d9488;
+      --teal-hover: #0f766e;
+      --teal-dark: #115e59;
+      --teal-border: #99f6e4;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-light: #dbeafe;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      height: 100vh;
+      overflow: hidden;
+      padding: 12px;
+    }
+
+    /* Bố cục 3 cột cố định */
+    .app-layout {
+      display: flex;
+      gap: 14px;
+      height: calc(100vh - 24px);
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .col-side {
+      width: 24%;
+      min-width: 270px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(13, 148, 136, 0.05);
+    }
+
+    .col-center {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(13, 148, 136, 0.06);
+    }
+
+    /* Chế độ toàn màn hình khi vào bài học */
+    .app-layout.lesson-fullscreen .col-side {
+      display: none !important;
+    }
+    .app-layout.lesson-fullscreen .col-center {
+      width: 100% !important;
+    }
+
+    /* Cột trái: Header & Bảng chữ cái */
+    .left-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--teal-main);
+      color: #fff;
+      font-size: 22px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 var(--teal-dark);
+    }
+    .brand-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+    .brand-sub {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--teal-main);
+      letter-spacing: 0.5px;
+    }
+    .star-counter {
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      color: #854d0e;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 5px 11px;
+      border-radius: 999px;
+    }
+    .sync-btn {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--teal-border);
+      background: var(--bg-soft);
+      color: var(--teal-hover);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: background 0.15s;
+    }
+    .sync-btn:hover {
+      background: #ccfbf1;
+    }
+    .script-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      gap: 4px;
+    }
+    .script-tab {
+      flex: 1;
+      border: none;
+      padding: 7px 0;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+    }
+    .script-tab.active {
+      background: var(--teal-main);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(13, 148, 136, 0.25);
+    }
+
+    .left-body {
+      padding: 12px 14px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .section-caption {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .section-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .vowel-header {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--teal-main);
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 8px;
+    }
+    .alpha-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+    .alpha-cell {
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      border-radius: 11px;
+      padding: 6px 2px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.12s, background-color 0.12s;
+    }
+    .alpha-cell:hover {
+      border-color: var(--teal-main);
+      background: var(--bg-soft);
+    }
+    .alpha-cell.active {
+      background: var(--teal-main);
+      border-color: var(--teal-dark);
+      color: #fff;
+    }
+    .alpha-cell .k-char {
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.15;
+    }
+    .alpha-cell .k-romaji {
+      font-size: 10px;
+      opacity: 0.75;
+      font-weight: 600;
+    }
+    .alpha-empty {
+      border: 1px dashed #e2e8f0;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    /* Cột phải: Kết quả ghép âm & Ghi chú */
+    .right-wrap {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+      overflow-y: auto;
+    }
+    .result-card {
+      background: #e6f7f5;
+      border: 1.5px solid var(--teal-border);
+      border-radius: 18px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .result-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--teal-hover);
+      text-transform: uppercase;
+    }
+    .result-kana {
+      font-size: 68px;
+      font-weight: 900;
+      color: var(--text-main);
+      margin: 8px 0 2px;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .result-romaji {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--teal-dark);
+    }
+    .result-pair {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+    .btn-listen {
+      margin-top: 14px;
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 12px;
+      background: var(--teal-main);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 3px 0 var(--teal-dark);
+    }
+    .btn-listen:hover {
+      background: var(--teal-hover);
+    }
+
+    .note-card {
+      background: #fefce8;
+      border: 1.5px solid #fef08a;
+      border-radius: 18px;
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .note-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .note-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #713f12;
+    }
+    .note-formula {
+      background: #fde047;
+      color: #713f12;
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 7px;
+      white-space: nowrap;
+    }
+    .note-body {
+      font-size: 13px;
+      color: #854d0e;
+      line-height: 1.5;
+    }
+    .note-footer {
+      border-top: 1px dashed #fde047;
+      padding-top: 10px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #713f12;
+    }
+
+    /* Cột giữa: Header & Bản đồ Candy Saga */
+    .center-header {
+      padding: 12px 18px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .map-title-badge {
+      background: var(--bg-soft);
+      border: 1.5px solid var(--teal-border);
+      color: var(--teal-dark);
+      font-weight: 800;
+      font-size: 15px;
+      padding: 6px 14px;
+      border-radius: 12px;
+    }
+    .btn-outline {
+      padding: 7px 12px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      background: #fff;
+      color: var(--text-main);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      border-color: var(--teal-main);
+      color: var(--teal-main);
+    }
+
+    .center-scroll {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+      background: linear-gradient(180deg, #f0fdfa 0%, #eef6ff 100%);
+    }
+
+    /* Bản đồ uốn lượn Candy Saga */
+    .saga-container {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+    .stage-banner {
+      text-align: center;
+      margin: 18px 0 14px;
+    }
+    .stage-banner span {
+      display: inline-block;
+      background: #ccfbf1;
+      border: 1.5px solid #5eead4;
+      color: var(--teal-dark);
+      font-weight: 800;
+      font-size: 12.5px;
+      padding: 5px 16px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .saga-row {
+      display: flex;
+      position: relative;
+      margin: 22px 0;
+      z-index: 2;
+    }
+    .saga-row.pos-center { justify-content: center; }
+    .saga-row.pos-left { justify-content: flex-start; padding-left: 14%; }
+    .saga-row.pos-right { justify-content: flex-end; padding-right: 14%; }
+
+    .level-node-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .level-circle {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, #2dd4bf, #0d9488 65%, #0f766e 100%);
+      border: 4px solid #ffffff;
+      box-shadow: 0 8px 0 #115e59, 0 12px 20px rgba(13, 148, 136, 0.28);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.12s;
+    }
+    .level-node-wrap:hover .level-circle {
+      transform: translateY(-2px);
+    }
+    .level-node-wrap:active .level-circle {
+      transform: translateY(3px);
+      box-shadow: 0 4px 0 #115e59;
+    }
+    .level-circle.locked {
+      background: radial-gradient(circle at 30% 25%, #cbd5e1, #94a3b8 70%, #64748b 100%);
+      box-shadow: 0 8px 0 #475569, 0 10px 15px rgba(15, 23, 42, 0.12);
+      cursor: not-allowed;
+    }
+    .level-num {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      opacity: 0.9;
+      letter-spacing: 0.5px;
+    }
+    .level-kana {
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+    .level-sub {
+      font-size: 10px;
+      font-weight: 700;
+      opacity: 0.92;
+    }
+    .level-stars {
+      margin-top: 8px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 14px;
+      letter-spacing: 2px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    }
+    .star-on { color: #eab308; }
+    .star-off { color: #cbd5e1; }
+
+    /* Giao diện Toàn Màn Hình Bài Học */
+    .lesson-wrapper {
+      padding: 16px 22px;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .star-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .star-tab-btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--teal-border);
+      background: #fff;
+      color: var(--teal-dark);
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .star-tab-btn:hover {
+      background: var(--bg-soft);
+    }
+    .star-tab-btn.active {
+      background: var(--teal-main);
+      border-color: var(--teal-dark);
+      color: #fff;
+    }
+    .star-tab-btn.done-star {
+      background: var(--teal-dark);
+      border-color: #042f2e;
+      color: #fff;
+    }
+
+    .task-banner {
+      background: #f0fdfa;
+      border: 1.5px solid var(--teal-border);
+      border-radius: 14px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .task-banner-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--teal-dark);
+    }
+    .task-banner-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .badge-progress {
+      background: #fff;
+      border: 1.5px solid var(--teal-border);
+      color: var(--teal-dark);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    /* Hộp câu hỏi chính */
+    .prompt-box {
+      background: #f0fdfa;
+      border: 2px solid #2dd4bf;
+      border-radius: 16px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .queue-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .q-chip {
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 15px;
+      border: 1.5px solid #cbd5e1;
+      background: #fff;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .q-chip.current {
+      background: var(--teal-main);
+      color: #fff;
+      border-color: var(--teal-dark);
+    }
+
+    /* Bảng Tìm Chữ 12 cột x 10 hàng = 120 ô lấp đầy trang */
+    .find-grid-120 {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      gap: 6px;
+      min-height: 460px;
+    }
+    .find-cell {
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 10px;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .find-cell:hover {
+      border-color: var(--teal-main);
+      background: var(--bg-soft);
+    }
+    .find-cell.found- vanished {
+      background: var(--teal-dark);
+      border-color: #042f2e;
+      color: transparent;
+      pointer-events: none;
+    }
+    .find-cell.wrong-flash {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+
+    /* Sao 2 & Sao 3: Ô điền chữ và Khay chọn chữ biến mất */
+    .big-kana-card {
+      min-width: 110px;
+      padding: 12px 24px;
+      background: #fff;
+      border: 2.5px solid var(--teal-main);
+      border-radius: 18px;
+      font-size: 52px;
+      font-weight: 900;
+      color: var(--text-main);
+      text-align: center;
+      white-space: nowrap;
+      line-height: 1.1;
+    }
+    .slots-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .answer-slot {
+      min-width: 58px;
+      height: 58px;
+      padding: 0 12px;
+      border-radius: 14px;
+      border: 2px dashed #2dd4bf;
+      background: #ffffff;
+      font-size: 24px;
+      font-weight: 900;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .answer-slot.filled {
+      border-style: solid;
+      border-color: var(--teal-dark);
+      background: var(--teal-main);
+      color: #ffffff;
+    }
+    .answer-slot.filled:hover {
+      background: #dc2626;
+      border-color: #991b1b;
+    }
+
+    .pool-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 6px 0;
+      min-height: 64px;
+      align-items: center;
+    }
+    .pool-btn {
+      min-width: 58px;
+      height: 54px;
+      padding: 0 16px;
+      border-radius: 13px;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      cursor: pointer;
+      box-shadow: 0 3px 0 #cbd5e1;
+      white-space: nowrap;
+    }
+    .pool-btn:hover {
+      border-color: var(--teal-main);
+      background: var(--bg-soft);
+    }
+    .pool-btn.used-hidden {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Lưới 10 từ vựng (2 cột x 5 hàng dọc lấp đầy trang) */
+    .words-grid-10 {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 10px;
+      min-height: 330px;
+    }
+    .word-item-card {
+      border-radius: 14px;
+      border: 2px solid #e2e8f0;
+      background: #f8fafc;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .word-item-card.current-word {
+      background: #ffffff;
+      border-color: var(--teal-main);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+    }
+    /* Màu đậm rõ rệt cho từ đã làm xong */
+    .word-item-card.completed-word {
+      background: var(--teal-dark) !important;
+      border-color: #042f2e !important;
+      color: #ffffff !important;
+    }
+    .word-romaji-title {
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .word-meaning-sub {
+      font-size: 12.5px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+    .word-status-badge {
+      padding: 5px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    /* Hộp thoại Mã chuyển máy */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 440px;
+      width: 92%;
+      padding: 22px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .code-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 13px;
+      margin: 8px 0 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-layout" id="app-layout">
+  <!-- CỘT TRÁI: BẢNG CHỮ CÁI HIRAGANA / KATAKANA -->
+  <aside class="col-side" id="col-left">
+    <div class="left-header">
+      <div class="brand-row">
+        <div class="brand-box">
+          <div class="brand-logo">に</div>
+          <div>
+            <div class="brand-title">Nihongo</div>
+            <div class="brand-sub">HỌC TỪ GỐC</div>
+          </div>
+        </div>
+        <div class="star-counter" id="total-stars-badge">⭐ 0/90</div>
+      </div>
+
+      <button class="sync-btn" onclick="openSyncModal()">📲 Mã chuyển máy</button>
+
+      <div class="script-tabs">
+        <button class="script-tab active" id="tab-hira" onclick="switchLeftScript('hira')">Hiragana</button>
+        <button class="script-tab" id="tab-kata" onclick="switchLeftScript('kata')">Katakana</button>
+      </div>
+    </div>
+
+    <div class="left-body">
+      <div class="section-caption">BẢNG CHỮ CÁI HIRAGANA/KATAKANA</div>
+      <div class="section-desc">Chọn chữ bất kỳ để nghe & xem giải thích bên phải.</div>
+      <div class="vowel-header">
+        <span>A</span><span>I</span><span>U</span><span>E</span><span>O</span>
+      </div>
+      <div class="alpha-grid" id="left-alpha-grid"></div>
+    </div>
+  </aside>
+
+  <!-- CỘT GIỮA: BẢN ĐỒ CHỮ CÁI CANDY SAGA / BÀI HỌC TOÀN MÀN HÌNH -->
+  <main class="col-center" id="col-center">
+    <div class="center-header" id="center-header"></div>
+    <div class="center-scroll" id="center-scroll"></div>
+  </main>
+
+  <!-- CỘT PHẢI: KẾT QUẢ GHÉP ÂM & GHI CHÚ -->
+  <aside class="col-side" id="col-right">
+    <div class="right-wrap">
+      <div class="result-card">
+        <div class="result-label">KẾT QUẢ GHÉP ÂM</div>
+        <div class="result-kana" id="right-kana">あ</div>
+        <div class="result-romaji" id="right-romaji">a</div>
+        <div class="result-pair" id="right-pair">ア · Katakana</div>
+        <button class="btn-listen" onclick="speakSelectedKana()">🔊 Nghe kết quả</button>
+      </div>
+
+      <div class="note-card">
+        <div>
+          <div class="note-top">
+            <span class="note-title" id="note-title">Nguyên âm gốc</span>
+            <span class="note-formula" id="note-formula">a</span>
+          </div>
+          <div class="note-body" id="note-body">
+            Chữ あ (a) là nguyên âm mở đầu tiên trong tiếng Nhật.
+          </div>
+        </div>
+        <div class="note-footer" id="note-footer">
+          Bấm vào ô tròn nổi trên Bản đồ chữ cái ở cột giữa để vào bài học 3 Sao: ⭐1 Tìm chữ ➔ ⭐2 Ghép âm ➔ ⭐3 Ghép từ.
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- HỘP THOẠI MÃ CHUYỂN MÁY -->
+<div class="modal-backdrop" id="sync-modal">
+  <div class="modal-box">
+    <h3 style="font-size:17px;font-weight:800;margin-bottom:6px;">📲 Mã chuyển tiến độ sang máy khác</h3>
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:8px;">Copy mã dưới đây để dán sang máy tính hoặc điện thoại khác:</p>
+    <input type="text" class="code-input" id="export-code-box" readonly onclick="this.select()">
+    <button class="btn-listen" style="margin-top:0;margin-bottom:14px;" onclick="copySyncCode()">📋 Copy Mã Tiến Độ</button>
+
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:4px;">Hoặc dán mã từ máy khác vào đây để khôi phục:</p>
+    <input type="text" class="code-input" id="import-code-box" placeholder="Dán mã NHG-... vào đây">
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn-outline" onclick="closeSyncModal()">Đóng</button>
+      <button class="btn-outline" style="background:#0d9488;color:#fff;border-color:#0f766e;" onclick="applySyncCode()">Nạp tiến độ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // =========================================================================
+  // 1. DỮ LIỆU BẢNG CHỮ CÁI & 30 ẢI (1-10 HIRAGANA, 11-20 KATAKANA, 21-30 ÂM GHÉP)
+  // =========================================================================
+  const ALPHABET_ROWS = [
+    { row: 'A', cons: '', cells: [
+      { h: 'あ', k: 'ア', r: 'a', note: 'Nguyên âm gốc mở miệng tự nhiên.' },
+      { h: 'い', k: 'イ', r: 'i', note: 'Nguyên âm gốc kéo nhẹ khóe miệng.' },
+      { h: 'う', k: 'ウ', r: 'u', note: 'Nguyên âm gốc môi hơi tròn nhưng không chu mạnh.' },
+      { h: 'え', k: 'エ', r: 'e', note: 'Nguyên âm gốc phát âm giống chữ ê/e nhẹ.' },
+      { h: 'お', k: 'オ', r: 'o', note: 'Nguyên âm gốc tròn môi rõ ràng.' }
+    ]},
+    { row: 'KA', cons: 'k', cells: [
+      { h: 'か', k: 'カ', r: 'ka', note: 'Ghép phụ âm k + nguyên âm a.' },
+      { h: 'き', k: 'キ', r: 'ki', note: 'Ghép phụ âm k + nguyên âm i.' },
+      { h: 'く', k: 'ク', r: 'ku', note: 'Ghép phụ âm k + nguyên âm u.' },
+      { h: 'け', k: 'ケ', r: 'ke', note: 'Ghép phụ âm k + nguyên âm e.' },
+      { h: 'こ', k: 'コ', r: 'ko', note: 'Ghép phụ âm k + nguyên âm o.' }
+    ]},
+    { row: 'SA', cons: 's', cells: [
+      { h: 'さ', k: 'サ', r: 'sa', note: 'Ghép phụ âm s + nguyên âm a.' },
+      { h: 'し', k: 'シ', r: 'shi', note: 'Âm đặc biệt: s + h + i đọc uốn nhẹ thành shi.' },
+      { h: 'す', k: 'ス', r: 'su', note: 'Ghép phụ âm s + nguyên âm u.' },
+      { h: 'せ', k: 'セ', r: 'se', note: 'Ghép phụ âm s + nguyên âm e.' },
+      { h: 'そ', k: 'ソ', r: 'so', note: 'Ghép phụ âm s + nguyên âm o.' }
+    ]},
+    { row: 'TA', cons: 't', cells: [
+      { h: 'た', k: 'タ', r: 'ta', note: 'Ghép phụ âm t + nguyên âm a.' },
+      { h: 'ち', k: 'チ', r: 'chi', note: 'Âm đặc biệt: ghép 3 chữ c + h + i.' },
+      { h: 'つ', k: 'ツ', r: 'tsu', note: 'Âm đặc biệt: ghép 3 chữ t + s + u.' },
+      { h: 'て', k: 'テ', r: 'te', note: 'Ghép phụ âm t + nguyên âm e.' },
+      { h: 'と', k: 'ト', r: 'to', note: 'Ghép phụ âm t + nguyên âm o.' }
+    ]},
+    { row: 'NA', cons: 'n', cells: [
+      { h: 'な', k: 'ナ', r: 'na', note: 'Ghép phụ âm n + nguyên âm a.' },
+      { h: 'に', k: 'ニ', r: 'ni', note: 'Ghép phụ âm n + nguyên âm i.' },
+      { h: 'ぬ', k: 'ヌ', r: 'nu', note: 'Ghép phụ âm n + nguyên âm u.' },
+      { h: 'ね', k: 'ネ', r: 'ne', note: 'Ghép phụ âm n + nguyên âm e.' },
+      { h: 'の', k: 'ノ', r: 'no', note: 'Ghép phụ âm n + nguyên âm o.' }
+    ]},
+    { row: 'HA', cons: 'h', cells: [
+      { h: 'は', k: 'ハ', r: 'ha', note: 'Ghép phụ âm h + nguyên âm a.' },
+      { h: 'ひ', k: 'ヒ', r: 'hi', note: 'Ghép phụ âm h + nguyên âm i.' },
+      { h: 'ふ', k: 'フ', r: 'fu', note: 'Âm đặc biệt: ghép f + u, thổi nhẹ qua hai môi.' },
+      { h: 'へ', k: 'ヘ', r: 'he', note: 'Ghép phụ âm h + nguyên âm e.' },
+      { h: 'ほ', k: 'ホ', r: 'ho', note: 'Ghép phụ âm h + nguyên âm o.' }
+    ]},
+    { row: 'MA', cons: 'm', cells: [
+      { h: 'ま', k: 'マ', r: 'ma', note: 'Ghép phụ âm m + nguyên âm a.' },
+      { h: 'み', k: 'ミ', r: 'mi', note: 'Ghép phụ âm m + nguyên âm i.' },
+      { h: 'む', k: 'ム', r: 'mu', note: 'Ghép phụ âm m + nguyên âm u.' },
+      { h: 'め', k: 'メ', r: 'me', note: 'Ghép phụ âm m + nguyên âm e.' },
+      { h: 'も', k: 'モ', r: 'mo', note: 'Ghép phụ âm m + nguyên âm o.' }
+    ]},
+    { row: 'YA', cons: 'y', cells: [
+      { h: 'や', k: 'ヤ', r: 'ya', note: 'Ghép phụ âm y + nguyên âm a.' },
+      null,
+      { h: 'ゆ', k: 'ユ', r: 'yu', note: 'Ghép phụ âm y + nguyên âm u.' },
+      null,
+      { h: 'よ', k: 'ヨ', r: 'yo', note: 'Ghép phụ âm y + nguyên âm o.' }
+    ]},
+    { row: 'RA', cons: 'r', cells: [
+      { h: 'ら', k: 'ラ', r: 'ra', note: 'Ghép phụ âm r + nguyên âm a.' },
+      { h: 'り', k: 'リ', r: 'ri', note: 'Ghép phụ âm r + nguyên âm i.' },
+      { h: 'る', k: 'ル', r: 'ru', note: 'Ghép phụ âm r + nguyên âm u.' },
+      { h: 'れ', k: 'レ', r: 're', note: 'Ghép phụ âm r + nguyên âm e.' },
+      { h: 'ろ', k: 'ロ', r: 'ro', note: 'Ghép phụ âm r + nguyên âm o.' }
+    ]},
+    { row: 'WA', cons: 'w', cells: [
+      { h: 'わ', k: 'ワ', r: 'wa', note: 'Ghép phụ âm w + nguyên âm a.' },
+      null,
+      { h: 'を', k: 'ヲ', r: 'wo', note: 'Trợ từ tân ngữ: ghép w + o.' },
+      null,
+      { h: 'ん', k: 'ン', r: 'n', note: 'Âm mũi cuối duy nhất trong tiếng Nhật.' }
+    ]}
+  ];
+
+  // Từ điển 10 từ vựng cho từng hàng (Đủ 10 từ cho mỗi ải)
+  const ROW_WORDS_HIRA = {
+    'A': [
+      { r: 'ai', m: 'Tình yêu', s: ['あ','い'] },
+      { r: 'ao', m: 'Màu xanh', s: ['あ','お'] },
+      { r: 'ie', m: 'Ngôi nhà', s: ['い','え'] },
+      { r: 'ue', m: 'Phía trên', s: ['う','え'] },
+      { r: 'aoi', m: 'Xanh lam', s: ['あ','お','い'] },
+      { r: 'ii', m: 'Tốt / Hay', s: ['い','い'] },
+      { r: 'au', m: 'Gặp gỡ', s: ['あ','う'] },
+      { r: 'iu', m: 'Nói', s: ['い','う'] },
+      { r: 'oi', m: 'Cháu trai', s: ['お','い'] },
+      { r: 'ooi', m: 'Nhiều', s: ['お','お','い'] }
+    ],
+    'KA': [
+      { r: 'kaki', m: 'Quả hồng', s: ['か','き'] },
+      { r: 'kiku', m: 'Hoa cúc', s: ['き','く'] },
+      { r: 'kaku', m: 'Viết / Vẽ', s: ['か','く'] },
+      { r: 'koko', m: 'Ở đây', s: ['こ','こ'] },
+      { r: 'ike', m: 'Cái ao', s: ['い','け'] },
+      { r: 'aki', m: 'Mùa thu', s: ['あ','き'] },
+      { r: 'koi', m: 'Cá chép', s: ['こ','い'] },
+      { r: 'koe', m: 'Giọng nói', s: ['こ','え'] },
+      { r: 'kao', m: 'Khuôn mặt', s: ['か','お'] },
+      { r: 'akai', m: 'Màu đỏ', s: ['あ','か','い'] }
+    ],
+    'SA': [
+      { r: 'sushi', m: 'Món Sushi', s: ['す','し'] },
+      { r: 'kasa', m: 'Cái ô', s: ['か','さ'] },
+      { r: 'asa', m: 'Buổi sáng', s: ['あ','さ'] },
+      { r: 'ashi', m: 'Đôi chân', s: ['あ','し'] },
+      { r: 'ushi', m: 'Con bò', s: ['う','し'] },
+      { r: 'sake', m: 'Cá hồi', s: ['さ','け'] },
+      { r: 'soko', m: 'Ở đó', s: ['そ','こ'] },
+      { r: 'ase', m: 'Mồ hôi', s: ['あ','せ'] },
+      { r: 'uso', m: 'Nói dối', s: ['う','そ'] },
+      { r: 'sekai', m: 'Thế giới', s: ['せ','か','い'] }
+    ],
+    'TA': [
+      { r: 'kuchi', m: 'Cái miệng', s: ['く','ち'] },
+      { r: 'kutsu', m: 'Đôi giày', s: ['く','つ'] },
+      { r: 'ito', m: 'Sợi chỉ', s: ['い','と'] },
+      { r: 'uta', m: 'Bài hát', s: ['う','た'] },
+      { r: 'oto', m: 'Âm thanh', s: ['お','と'] },
+      { r: 'tako', m: 'Bạch tuộc', s: ['た','こ'] },
+      { r: 'tsuki', m: 'Mặt trăng', s: ['つ','き'] },
+      { r: 'te', m: 'Bàn tay', s: ['て'] },
+      { r: 'chikatetsu', m: 'Tàu điện ngầm', s: ['ち','か','て','つ'] },
+      { r: 'ashita', m: 'Ngày mai', s: ['あ','し','た'] }
+    ],
+    'NA': [
+      { r: 'inu', m: 'Con chó', s: ['い','ぬ'] },
+      { r: 'neko', m: 'Con mèo', s: ['ね','こ'] },
+      { r: 'natsu', m: 'Mùa hè', s: ['な','つ'] },
+      { r: 'niku', m: 'Thịt', s: ['に','く'] },
+      { r: 'ani', m: 'Anh trai', s: ['あ','に'] },
+      { r: 'ane', m: 'Chị gái', s: ['あ','ね'] },
+      { r: 'sakana', m: 'Con cá', s: ['さ','か','な'] },
+      { r: 'nani', m: 'Cái gì', s: ['な','に'] },
+      { r: 'kuni', m: 'Đất nước', s: ['く','に'] },
+      { r: 'okaasan', m: 'Tấm vải (nuno)', s: ['ぬ','の'] }
+    ],
+    'HA': [
+      { r: 'hana', m: 'Bông hoa', s: ['は','な'] },
+      { r: 'hito', m: 'Con người', s: ['ひ','と'] },
+      { r: 'fune', m: 'Con thuyền', s: ['ふ','ね'] },
+      { r: 'hoshi', m: 'Ngôi sao', s: ['ほ','し'] },
+      { r: 'haha', m: 'Mẹ', s: ['は','は'] },
+      { r: 'hi', m: 'Ngọn lửa', s: ['ひ'] },
+      { r: 'heso', m: 'Cái rốn', s: ['へ','そ'] },
+      { r: 'hako', m: 'Cái hộp', s: ['は','こ'] },
+      { r: 'fuku', m: 'Quần áo', s: ['ふ','く'] },
+      { r: 'hashi', m: 'Đôi đũa', s: ['は','し'] }
+    ],
+    'MA': [
+      { r: 'mimi', m: 'Đôi tai', s: ['み','み'] },
+      { r: 'me', m: 'Đôi mắt', s: ['め'] },
+      { r: 'ame', m: 'Cơn mưa', s: ['あ','め'] },
+      { r: 'umi', m: 'Biển cả', s: ['う','み'] },
+      { r: 'momo', m: 'Quả đào', s: ['も','も'] },
+      { r: 'mushi', m: 'Côn trùng', s: ['む','し'] },
+      { r: 'kuma', m: 'Con gấu', s: ['く','ま'] },
+      { r: 'kami', m: 'Tờ giấy', s: ['か','み'] },
+      { r: 'machi', m: 'Thị trấn', s: ['ま','ち'] },
+      { r: 'namae', m: 'Tên gọi', s: ['な','ま','え'] }
+    ],
+    'YA': [
+      { r: 'yama', m: 'Ngọn núi', s: ['や','ま'] },
+      { r: 'yuki', m: 'Tuyết rơi', s: ['ゆ','き'] },
+      { r: 'yume', m: 'Giấc mơ', s: ['ゆ','め'] },
+      { r: 'heya', m: 'Căn phòng', s: ['へ','や'] },
+      { r: 'fuyu', m: 'Mùa đông', s: ['ふ','ゆ'] },
+      { r: 'yasumi', m: 'Nghỉ ngơi', s: ['や','す','み'] },
+      { r: 'yoi', m: 'Tốt', s: ['よ','い'] },
+      { r: 'yomu', m: 'Đọc sách', s: ['よ','む'] },
+      { r: 'yoko', m: 'Bên cạnh', s: ['よ','こ'] },
+      { r: 'oyu', m: 'Nước nóng', s: ['お','ゆ'] }
+    ],
+    'RA': [
+      { r: 'sakura', m: 'Hoa anh đào', s: ['さ','く','ら'] },
+      { r: 'sora', m: 'Bầu trời', s: ['そ','ら'] },
+      { r: 'tori', m: 'Con chim', s: ['と','り'] },
+      { r: 'haru', m: 'Mùa xuân', s: ['は','る'] },
+      { r: 'yoru', m: 'Ban đêm', s: ['よ','る'] },
+      { r: 'kuruma', m: 'Xe ô tô', s: ['く','る','ま'] },
+      { r: 'shiro', m: 'Màu trắng', s: ['し','ろ'] },
+      { r: 'kuro', m: 'Màu đen', s: ['く','ろ'] },
+      { r: 'kore', m: 'Cái này', s: ['こ','れ'] },
+      { r: 'sore', m: 'Cái đó', s: ['そ','れ'] }
+    ],
+    'WA': [
+      { r: 'kawa', m: 'Dòng sông', s: ['か','わ'] },
+      { r: 'niwa', m: 'Sân vườn', s: ['に','わ'] },
+      { r: 'watashi', m: 'Tôi', s: ['わ','た','し'] },
+      { r: 'hon', m: 'Quyển sách', s: ['ほ','ん'] },
+      { r: 'san', m: 'Số 3', s: ['さ','ん'] },
+      { r: 'nihon', m: 'Nhật Bản', s: ['に','ほ','ん'] },
+      { r: 'tenki', m: 'Thời tiết', s: ['て','ん','き'] },
+      { r: 'mikan', m: 'Quả quýt', s: ['み','か','ん'] },
+      { r: 'wakai', m: 'Trẻ trung', s: ['わ','か','い'] },
+      { r: 'honwo', m: 'Đọc sách (trợ từ wo)', s: ['ほ','ん','を'] }
+    ]
+  };
+
+  // Dữ liệu 10 Ải Âm Ghép (Ải 21 -> 30)
+  const YOON_LEVELS = [
+    {
+      row: 'KYA', label: 'Âm ghép KYA', icon: 'きゃ',
+      chars: [
+        { k: 'きゃ', r: 'kya', note: 'き (ki) + ゃ (ya nhỏ) = kya' },
+        { k: 'きゅ', r: 'kyu', note: 'き (ki) + ゅ (yu nhỏ) = kyu' },
+        { k: 'きょ', r: 'kyo', note: 'き (ki) + ょ (yo nhỏ) = kyo' }
+      ],
+      words: [
+        { r: 'kyaku', m: 'Khách hàng', s: ['きゃ','く'] },
+        { r: 'kyou', m: 'Hôm nay', s: ['きょ','う'] },
+        { r: 'kyuu', m: 'Số 9', s: ['きゅ','う'] },
+        { r: 'kyonen', m: 'Năm ngoái', s: ['きょ','ね','ん'] },
+        { r: 'kyori', m: 'Khoảng cách', s: ['きょ','り'] },
+        { r: 'kyoka', m: 'Sự cho phép', s: ['きょ','か'] },
+        { r: 'kyoku', m: 'Bản nhạc', s: ['きょ','く'] },
+        { r: 'kyuuri', m: 'Dưa chuột', s: ['きゅ','う','り'] },
+        { r: 'kyasha', m: 'Mảnh mai', s: ['きゃ','しゃ'] },
+        { r: 'kyodai', m: 'Anh em', s: ['きょ','う','だ','い'] }
+      ]
+    },
+    {
+      row: 'SHA', label: 'Âm ghép SHA', icon: 'しゃ',
+      chars: [
+        { k: 'しゃ', r: 'sha', note: 'し (shi) + ゃ (ya nhỏ) = sha' },
+        { k: 'しゅ', r: 'shu', note: 'し (shi) + ゅ (yu nhỏ) = shu' },
+        { k: 'しょ', r: 'sho', note: 'し (shi) + ょ (yo nhỏ) = sho' }
+      ],
+      words: [
+        { r: 'shashin', m: 'Bức ảnh', s: ['しゃ','し','ん'] },
+        { r: 'isha', m: 'Bác sĩ', s: ['い','しゃ'] },
+        { r: 'kaisha', m: 'Công ty', s: ['か','い','しゃ'] },
+        { r: 'shumi', m: 'Sở thích', s: ['しゅ','み'] },
+        { r: 'shokuji', m: 'Bữa ăn', s: ['しょ','く','じ'] },
+        { r: 'shio', m: 'Muối (ôn tập)', s: ['し','お'] },
+        { r: 'shukudai', m: 'Bài tập về nhà', s: ['しゅ','く','だ','い'] },
+        { r: 'densha', m: 'Tàu điện', s: ['で','ん','しゃ'] },
+        { r: 'shokudou', m: 'Nhà ăn', s: ['しょ','く','ど','う'] },
+        { r: 'shakai', m: 'Xã hội', s: ['しゃ','か','い'] }
+      ]
+    },
+    {
+      row: 'CHA', label: 'Âm ghép CHA', icon: 'ちゃ',
+      chars: [
+        { k: 'ちゃ', r: 'cha', note: 'ち (chi) + ゃ (ya nhỏ) = cha' },
+        { k: 'ちゅ', r: 'chu', note: 'ち (chi) + ゅ (yu nhỏ) = chu' },
+        { k: 'ちょ', r: 'cho', note: 'ち (chi) + ょ (yo nhỏ) = cho' }
+      ],
+      words: [
+        { r: 'ocha', m: 'Trà xanh', s: ['お','ちゃ'] },
+        { r: 'chairo', m: 'Màu nâu', s: ['ちゃ','い','ろ'] },
+        { r: 'chawan', m: 'Bát cơm', s: ['ちゃ','わ','ん'] },
+        { r: 'chokin', m: 'Tiết kiệm', s: ['ちょ','き','ん'] },
+        { r: 'chuugoku', m: 'Trung Quốc', s: ['ちゅ','う','ご','く'] },
+        { r: 'chouchou', m: 'Con bướm', s: ['ちょ','う','ちょ','う'] },
+        { r: 'omocha', m: 'Đồ chơi', s: ['お','も','ちゃ'] },
+        { r: 'chuui', m: 'Chú ý', s: ['ちゅ','う','い'] },
+        { r: 'chokusetsu', m: 'Trực tiếp', s: ['ちょ','く','せ','つ'] },
+        { r: 'koucha', m: 'Hồng trà', s: ['こ','う','ちゃ'] }
+      ]
+    },
+    {
+      row: 'NYA', label: 'Âm ghép NYA', icon: 'にゃ',
+      chars: [
+        { k: 'にゃ', r: 'nya', note: 'に (ni) + ゃ (ya nhỏ) = nya' },
+        { k: 'にゅ', r: 'nyu', note: 'に (ni) + ゅ (yu nhỏ) = nyu' },
+        { k: 'にょ', r: 'nyo', note: 'に (ni) + ょ (yo nhỏ) = nyo' }
+      ],
+      words: [
+        { r: 'gyuunyuu', m: 'Sữa bò', s: ['ぎゅ','う','にゅ','う'] },
+        { r: 'nyuugaku', m: 'Nhập học', s: ['にゅ','う','が','く'] },
+        { r: 'nyuuin', m: 'Nhập viện', s: ['にゅ','う','い','ん'] },
+        { r: 'konnyaku', m: 'Thạch Konnyaku', s: ['こ','ん','にゃ','く'] },
+        { r: 'nyanko', m: 'Mèo con', s: ['にゃ','ん','こ'] },
+        { r: 'nyuusu', m: 'Tin tức', s: ['にゅ','う','す'] },
+        { r: 'nyoubou', m: 'Người vợ', s: ['にょ','う','ぼ','う'] },
+        { r: 'nyuusha', m: 'Vào công ty', s: ['にゅ','う','しゃ'] },
+        { r: 'nyuuryoku', m: 'Nhập liệu', s: ['にゅ','う','りょ','く'] },
+        { r: 'nyuujou', m: 'Vào cổng', s: ['にゅ','う','じょ','う'] }
+      ]
+    },
+    {
+      row: 'HYA', label: 'Âm ghép HYA', icon: 'ひゃ',
+      chars: [
+        { k: 'ひゃ', r: 'hya', note: 'ひ (hi) + ゃ (ya nhỏ) = hya' },
+        { k: 'ひゅ', r: 'hyu', note: 'ひ (hi) + ゅ (yu nhỏ) = hyu' },
+        { k: 'ひょ', r: 'hyo', note: 'ひ (hi) + ょ (yo nhỏ) = hyo' }
+      ],
+      words: [
+        { r: 'hyaku', m: 'Số 100', s: ['ひゃ','く'] },
+        { r: 'hyou', m: 'Con báo / Bảng', s: ['ひょ','う'] },
+        { r: 'hyouka', m: 'Đánh giá', s: ['ひょ','う','か'] },
+        { r: 'hyoushi', m: 'Bìa sách', s: ['ひょ','う','し'] },
+        { r: 'hyougen', m: 'Biểu hiện', s: ['ひょ','う','げ','ん'] },
+        { r: 'nihyaku', m: 'Số 200', s: ['に','ひゃ','く'] },
+        { r: 'hyakuman', m: 'Một triệu', s: ['ひゃ','く','ま','ん'] },
+        { r: 'hyouri', m: 'Hai mặt', s: ['ひょ','う','り'] },
+        { r: 'hyuuga', m: 'Hướng nắng', s: ['ひゅ','う','が'] },
+        { r: 'hyakkaten', m: 'Bách hóa', s: ['ひゃ','っ','か','て','ん'] }
+      ]
+    },
+    {
+      row: 'MYA', label: 'Âm ghép MYA', icon: 'みゃ',
+      chars: [
+        { k: 'みゃ', r: 'mya', note: 'み (mi) + ゃ (ya nhỏ) = mya' },
+        { k: 'みゅ', r: 'myu', note: 'み (mi) + ゅ (yu nhỏ) = myu' },
+        { k: 'みょ', r: 'myo', note: 'み (mi) + ょ (yo nhỏ) = myo' }
+      ],
+      words: [
+        { r: 'myaku', m: 'Mạch đập', s: ['みゃ','く'] },
+        { r: 'myouji', m: 'Họ (tên)', s: ['みょ','う','じ'] },
+        { r: 'myou', m: 'Kỳ diệu', s: ['みょ','う'] },
+        { r: 'myounichi', m: 'Ngày mai (trang trọng)', s: ['みょ','う','に','ち'] },
+        { r: 'sanmyaku', m: 'Dãy núi', s: ['さ','ん','みゃ','く'] },
+        { r: 'myakuraku', m: 'Mạch lạc', s: ['みゃ','く','ら','く'] },
+        { r: 'kimyou', m: 'Kỳ lạ', s: ['き','みょ','う'] },
+        { r: 'myou안', m: 'Ý kiến hay', s: ['みょ','う','あ','ん'] },
+        { r: 'myuujikku', m: 'Âm nhạc', s: ['みゅ','う','じ','っ','く'] },
+        { r: 'jumyou', m: 'Tuổi thọ', s: ['じゅ','みょ','う'] }
+      ]
+    },
+    {
+      row: 'RYA', label: 'Âm ghép RYA', icon: 'りゃ',
+      chars: [
+        { k: 'りゃ', r: 'rya', note: 'り (ri) + ゃ (ya nhỏ) = rya' },
+        { k: 'りゅ', r: 'ryu', note: 'り (ri) + ゅ (yu nhỏ) = ryu' },
+        { k: 'りょ', r: 'ryo', note: 'り (ri) + ょ (yo nhỏ) = ryo' }
+      ],
+      words: [
+        { r: 'ryokou', m: 'Du lịch', s: ['りょ','こ','う'] },
+        { r: 'ryouri', m: 'Nấu ăn', s: ['りょ','う','り'] },
+        { r: 'ryokan', m: 'Lữ quán', s: ['りょ','か','ん'] },
+        { r: 'ryuu', m: 'Con rồng', s: ['りゅ','う'] },
+        { r: 'ryoushin', m: 'Cha mẹ', s: ['りょ','う','し','ん'] },
+        { r: 'ryuugaku', m: 'Du học', s: ['りゅ','う','が','く'] },
+        { r: 'ryoku', m: 'Sức lực', s: ['りょ','く'] },
+        { r: 'ryaku', m: 'Tóm lược', s: ['りゃ','く'] },
+        { r: 'ryoukin', m: 'Chi phí', s: ['りょ','う','き','ん'] },
+        { r: 'ryokucha', m: 'Trà xanh', s: ['りょ','く','ちゃ'] }
+      ]
+    },
+    {
+      row: 'GYA', label: 'Âm ghép GYA', icon: 'ぎゃ',
+      chars: [
+        { k: 'ぎゃ', r: 'gya', note: 'ぎ (gi) + ゃ (ya nhỏ) = gya' },
+        { k: 'ぎゅ', r: 'gyu', note: 'ぎ (gi) + ゅ (yu nhỏ) = gyu' },
+        { k: 'ぎょ', r: 'gyo', note: 'ぎ (gi) + ょ (yo nhỏ) = gyo' }
+      ],
+      words: [
+        { r: 'gyaku', m: 'Ngược lại', s: ['ぎゃ','く'] },
+        { r: 'kingyo', m: 'Cá vàng', s: ['き','ん','ぎょ'] },
+        { r: 'gyouza', m: 'Há cảo Gyoza', s: ['ぎょ','う','ざ'] },
+        { r: 'gyuuniku', m: 'Thịt bò', s: ['ぎゅ','う','に','く'] },
+        { r: 'ningyou', m: 'Búp bê', s: ['に','ん','ぎょ','う'] },
+        { r: 'jugyou', m: 'Giờ học', s: ['じゅ','ぎょ','う'] },
+        { r: 'gyokai', m: 'Hải sản', s: ['ぎょ','か','い'] },
+        { r: 'gyouretsu', m: 'Xếp hàng', s: ['ぎょ','う','れ','つ'] },
+        { r: 'sangyou', m: 'Công nghiệp', s: ['さ','ん','ぎょ','う'] },
+        { r: 'gyakuten', m: 'Lội ngược dòng', s: ['ぎゃ','く','て','ん'] }
+      ]
+    },
+    {
+      row: 'JA', label: 'Âm ghép JA', icon: 'じゃ',
+      chars: [
+        { k: 'じゃ', r: 'ja', note: 'じ (ji) + ゃ (ya nhỏ) = ja' },
+        { k: 'じゅ', r: 'ju', note: 'じ (ji) + ゅ (yu nhỏ) = ju' },
+        { k: 'じょ', r: 'jo', note: 'じ (ji) + ょ (yo nhỏ) = jo' }
+      ],
+      words: [
+        { r: 'ocha_ja', m: 'Khoai tây (jagaimo)', s: ['じゃ','が','い','も'] },
+        { r: 'jinja', m: 'Đền Thần đạo', s: ['じ','ん','じゃ'] },
+        { r: 'juusho', m: 'Địa chỉ', s: ['じゅ','う','しょ'] },
+        { r: 'jouzu', m: 'Giỏi / Khéo léo', s: ['じょ','う','ず'] },
+        { r: 'juu', m: 'Số 10', s: ['じゅ','う'] },
+        { r: 'kanojo', m: 'Cô ấy / Bạn gái', s: ['か','の','じょ'] },
+        { r: 'jama', m: 'Làm phiền', s: ['じゃ','ま'] },
+        { r: 'junbi', m: 'Chuẩn bị', s: ['じゅ','ん','び'] },
+        { r: 'josei', m: 'Phụ nữ', s: ['じょ','せ','い'] },
+        { r: 'joudan', m: 'Nói đùa', s: ['じょ','う','だ','ん'] }
+      ]
+    },
+    {
+      row: 'BYA', label: 'Âm ghép BYA/PYA', icon: 'びゃ',
+      chars: [
+        { k: 'びゃ', r: 'bya', note: 'び (bi) + ゃ (ya nhỏ) = bya' },
+        { k: 'びゅ', r: 'byu', note: 'び (bi) + ゅ (yu nhỏ) = byu' },
+        { k: 'びょ', r: 'byo', note: 'び (bi) + ょ (yo nhỏ) = byo' },
+        { k: 'ぴゃ', r: 'pya', note: 'ぴ (pi) + ゃ (ya nhỏ) = pya' },
+        { k: 'ぴゅ', r: 'pyu', note: 'ぴ (pi) + ゅ (yu nhỏ) = pyu' },
+        { k: 'ぴょ', r: 'pyo', note: 'ぴ (pi) + ょ (yo nhỏ) = pyo' }
+      ],
+      words: [
+        { r: 'byouin', m: 'Bệnh viện', s: ['びょ','う','い','ん'] },
+        { r: 'byouki', m: 'Ốm / Bệnh', s: ['びょ','う','き'] },
+        { r: 'sanbyaku', m: 'Số 300', s: ['さ','ん','びゃ','く'] },
+        { r: 'roppyaku', m: 'Số 600', s: ['ろ','っ','ぴゃ','く'] },
+        { r: 'happyaku', m: 'Số 800', s: ['は','っ','ぴゃ','く'] },
+        { r: 'byoudou', m: 'Bình đẳng', s: ['びょ','う','ど','う'] },
+        { r: 'byousoku', m: 'Tốc độ giây', s: ['びょ','う','そ','く'] },
+        { r: 'pyonpyon', m: 'Nhảy lò cò', s: ['ぴょ','ん','ぴょ','ん'] },
+        { r: 'happyo', m: 'Phát biểu', s: ['は','っ','ぴょ','う'] },
+        { r: 'byuubyu', m: 'Gió thổi vù vù', s: ['びゅ','う','びゅ','う'] }
+      ]
+    }
+  ];
+
+  // Hàm chuyển câu từ Hiragana sang Katakana cho Ải 11 -> 20
+  const HIRA_TO_KATA = {};
+  ALPHABET_ROWS.forEach(r => r.cells.forEach(c => { if (c) HIRA_TO_KATA[c.h] = c.k; }));
+
+  function build30Levels() {
+    const list = [];
+    // Ải 1 - 10: Hiragana
+    ALPHABET_ROWS.forEach((rowObj, idx) => {
+      const validCells = rowObj.cells.filter(Boolean).map(c => ({ k: c.h, r: c.r, note: c.note }));
+      list.push({
+        id: idx + 1,
+        stage: 1,
+        label: `Hàng ${rowObj.row}`,
+        icon: validCells[0].k,
+        chars: validCells,
+        words: ROW_WORDS_HIRA[rowObj.row].map(w => ({ r: w.r, m: w.m, s: [...w.s] }))
+      });
+    });
+    // Ải 11 - 20: Katakana
+    ALPHABET_ROWS.forEach((rowObj, idx) => {
+      const validCells = rowObj.cells.filter(Boolean).map(c => ({ k: c.k, r: c.r, note: c.note }));
+      const kataWords = ROW_WORDS_HIRA[rowObj.row].map(w => ({
+        r: w.r,
+        m: w.m,
+        s: w.s.map(ch => HIRA_TO_KATA[ch] || ch)
+      }));
+      list.push({
+        id: idx + 11,
+        stage: 2,
+        label: `Kata ${rowObj.row}`,
+        icon: validCells[0].k,
+        chars: validCells,
+        words: kataWords
+      });
+    });
+    // Ải 21 - 30: Âm ghép
+    YOON_LEVELS.forEach((yObj, idx) => {
+      list.push({
+        id: idx + 21,
+        stage: 3,
+        label: yObj.label,
+        icon: yObj.icon,
+        chars: yObj.chars,
+        words: yObj.words.map(w => ({ r: w.r.replace('_ja',''), m: w.m, s: [...w.s] }))
+      });
+    });
+    return list;
+  }
+
+  const LEVELS = build30Levels();
+
+  // =========================================================================
+  // 2. TRẠNG THÁI ỨNG DỤNG & LƯU TRỮ TIẾN ĐỘ
+  // =========================================================================
+  let leftScript = 'hira';
+  let selectedCell = { h: 'あ', k: 'ア', r: 'a', note: 'Chữ あ (a) là nguyên âm mở đầu tiên trong tiếng Nhật.' };
+  let centerMode = 'map'; // 'map' | 'lesson'
+  let currentLevelId = 1;
+  let currentStarStep = 1; // 1 | 2 | 3
+  let unlockAll = false;
+  let lastMapScrollTop = 0;
+
+  let progress = {};
+  LEVELS.forEach(lv => { progress[lv.id] = [false, false, false]; });
+
+  function loadSavedProgress() {
+    try {
+      const raw = localStorage.getItem('nihongo_30_progress_v3');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        LEVELS.forEach(lv => {
+          if (Array.isArray(parsed[lv.id])) progress[lv.id] = parsed[lv.id];
+        });
+      }
+    } catch (e) {}
+  }
+
+  function saveProgress() {
+    try {
+      localStorage.setItem('nihongo_30_progress_v3', JSON.stringify(progress));
+    } catch (e) {}
+    updateTotalStarsUI();
+  }
+
+  function updateTotalStarsUI() {
+    let total = 0;
+    Object.values(progress).forEach(arr => arr.forEach(v => { if (v) total++; }));
+    const badge = document.getElementById('total-stars-badge');
+    if (badge) badge.textContent = `⭐ ${total}/90`;
+  }
+
+  function isLevelUnlocked(lvId) {
+    if (unlockAll || lvId === 1) return true;
+    const prev = progress[lvId - 1];
+    return prev && prev[0] && prev[1] && prev[2];
+  }
+
+  function shuffleArray(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  // =========================================================================
+  // 3. PHÁT ÂM TIẾNG NHẬT ĐA THIẾT BỊ
+  // =========================================================================
+  function speakJa(text) {
+    if (!text) return;
+    try {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ja-JP';
+        utter.rate = 0.85;
+        const voices = window.speechSynthesis.getVoices();
+        const jaVoice = voices.find(v => v.lang && v.lang.toLowerCase().includes('ja'));
+        if (jaVoice) utter.voice = jaVoice;
+        window.speechSynthesis.speak(utter);
+      }
+    } catch (e) {}
+  }
+
+  function speakSelectedKana() {
+    speakJa(leftScript === 'hira' ? selectedCell.h : selectedCell.k);
+  }
+
+  // =========================================================================
+  // 4. CỘT TRÁI & CỘT PHẢI
+  // =========================================================================
+  function switchLeftScript(mode) {
+    leftScript = mode;
+    document.getElementById('tab-hira').classList.toggle('active', mode === 'hira');
+    document.getElementById('tab-kata').classList.toggle('active', mode === 'kata');
+    renderLeftAlphabet();
+    renderRightCard();
+  }
+
+  function renderLeftAlphabet() {
+    const grid = document.getElementById('left-alpha-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    ALPHABET_ROWS.forEach(rowObj => {
+      rowObj.cells.forEach(cell => {
+        if (!cell) {
+          const empty = document.createElement('div');
+          empty.className = 'alpha-empty';
+          empty.textContent = '—';
+          grid.appendChild(empty);
+          return;
+        }
+        const btn = document.createElement('div');
+        const active = selectedCell.r === cell.r;
+        btn.className = 'alpha-cell' + (active ? ' active' : '');
+        const mainChar = leftScript === 'hira' ? cell.h : cell.k;
+        btn.innerHTML = `<div class="k-char">${mainChar}</div><div class="k-romaji">${cell.r}</div>`;
+        btn.onclick = () => {
+          selectedCell = cell;
+          renderLeftAlphabet();
+          renderRightCard();
+          speakJa(mainChar);
+        };
+        grid.appendChild(btn);
+      });
+    });
+  }
+
+  function renderRightCard() {
+    const mainChar = leftScript === 'hira' ? selectedCell.h : selectedCell.k;
+    const pairText = leftScript === 'hira'
+      ? `${selectedCell.k} · Katakana`
+      : `${selectedCell.h} · Hiragana`;
+
+    document.getElementById('right-kana').textContent = mainChar;
+    document.getElementById('right-romaji').textContent = selectedCell.r;
+    document.getElementById('right-pair').textContent = pairText;
+
+    const letters = selectedCell.r.split('').join(' + ');
+    document.getElementById('note-title').textContent = `Cấu tạo âm (${selectedCell.r.toUpperCase()})`;
+    document.getElementById('note-formula').textContent = letters;
+    document.getElementById('note-body').textContent = selectedCell.note;
+  }
+
+  // =========================================================================
+  // 5. CỘT GIỮA: BẢN ĐỒ CHỮ CÁI (CANDY SAGA 30 ẢI)
+  // =========================================================================
+  function renderCenter() {
+    const layout = document.getElementById('app-layout');
+    if (centerMode === 'lesson') {
+      layout.classList.add('lesson-fullscreen');
+      renderLessonScreen();
+    } else {
+      layout.classList.remove('lesson-fullscreen');
+      renderSagaMap();
+    }
+  }
+
+  function renderSagaMap() {
+    const header = document.getElementById('center-header');
+    const scrollBox = document.getElementById('center-scroll');
+
+    header.innerHTML = `
+      <div class="map-title-badge">🗺️ Bản đồ chữ cái</div>
+      <button class="btn-outline" onclick="toggleUnlockAll()">
+        ${unlockAll ? '🔒 Đang mở thử 30 ải' : '🔓 Mở khóa thử tất cả ải'}
+      </button>
+    `;
+
+    const positions = ['pos-center', 'pos-right', 'pos-center', 'pos-left'];
+    let html = `<div class="saga-container">`;
+
+    LEVELS.forEach((lv, index) => {
+      if (lv.id === 1) {
+        html += `<div class="stage-banner"><span>Chặng 1: Bảng Hiragana (Ải 1 – 10)</span></div>`;
+      } else if (lv.id === 11) {
+        html += `<div class="stage-banner"><span>Chặng 2: Bảng Katakana (Ải 11 – 20)</span></div>`;
+      } else if (lv.id === 21) {
+        html += `<div class="stage-banner"><span>Chặng 3: Âm ghép Yōon (Ải 21 – 30)</span></div>`;
+      }
+
+      const unlocked = isLevelUnlocked(lv.id);
+      const stars = progress[lv.id] || [false, false, false];
+      const posClass = positions[index % positions.length];
+
+      const starIcons = [0, 1, 2].map(i =>
+        `<span class="${stars[i] ? 'star-on' : 'star-off'}">★</span>`
+      ).join('');
+
+      html += `
+        <div class="saga-row ${posClass}" id="map-node-${lv.id}">
+          <div class="level-node-wrap" onclick="enterLevel(${lv.id})">
+            <div class="level-circle ${unlocked ? '' : 'locked'}">
+              <div class="level-num">LEVEL ${lv.id}</div>
+              <div class="level-kana">${lv.icon}</div>
+              <div class="level-sub">${lv.label}</div>
+            </div>
+            <div class="level-stars">${starIcons}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    scrollBox.innerHTML = html;
+
+    // Giữ nguyên vị trí cuộn tại ải vừa qua
+    requestAnimationFrame(() => {
+      const targetNode = document.getElementById(`map-node-${currentLevelId}`);
+      if (targetNode && currentLevelId > 1) {
+        targetNode.scrollIntoView({ block: 'center', behavior: 'instant' });
+      } else {
+        scrollBox.scrollTop = lastMapScrollTop;
+      }
+    });
+  }
+
+  function toggleUnlockAll() {
+    const scrollBox = document.getElementById('center-scroll');
+    if (scrollBox) lastMapScrollTop = scrollBox.scrollTop;
+    unlockAll = !unlockAll;
+    renderSagaMap();
+  }
+
+  // =========================================================================
+  // 6. LOGIC 3 SAO TRONG BÀI HỌC (XÁO TRỘN, BIẾN MẤT CHỮ, KHÔNG NHÁY)
+  // =========================================================================
+  let s1Queue = [];
+  let s1TargetIdx = 0;
+  let s1FoundCount = 0;
+  let s1GridCells = [];
+
+  let s2Queue = [];
+  let s2TargetIdx = 0;
+  let s2Slots = [];
+  let s2Pool = [];
+
+  let s3Queue = [];
+  let s3TargetIdx = 0;
+  let s3Slots = [];
+  let s3Pool = [];
+
+  function enterLevel(lvId) {
+    if (!isLevelUnlocked(lvId)) {
+      alert('Hãy hoàn thành đủ 3 Sao ⭐⭐⭐ ở ải trước (hoặc bấm "Mở khóa thử tất cả ải") nhé!');
+      return;
+    }
+    const scrollBox = document.getElementById('center-scroll');
+    if (scrollBox) lastMapScrollTop = scrollBox.scrollTop;
+
+    currentLevelId = lvId;
+    const stars = progress[lvId];
+    if (!stars[0]) currentStarStep = 1;
+    else if (!stars[1]) currentStarStep = 2;
+    else if (!stars[2]) currentStarStep = 3;
+    else currentStarStep = 1;
+
+    initLessonData(lvId);
+    centerMode = 'lesson';
+    renderCenter();
+  }
+
+  function backToMap() {
+    centerMode = 'map';
+    renderCenter();
+  }
+
+  function reshuffleCurrentLevel() {
+    initLessonData(currentLevelId);
+    renderLessonScreen();
+  }
+
+  function switchStarTab(step) {
+    currentStarStep = step;
+    renderLessonScreen();
+  }
+
+  function initLessonData(lvId) {
+    const lv = LEVELS.find(x => x.id === lvId);
+
+    // --- Khởi tạo Sao 1: Tìm tất cả các chữ trong hàng (mỗi chữ 10 lần, bảng 120 ô) ---
+    s1Queue = shuffleArray(lv.chars);
+    s1TargetIdx = 0;
+    s1FoundCount = 0;
+    buildStar1Grid120(lv);
+
+    // --- Khởi tạo Sao 2: Ghép âm đầy đủ các chữ trong hàng ---
+    s2Queue = shuffleArray(lv.chars);
+    s2TargetIdx = 0;
+    setupStar2CurrentQuestion();
+
+    // --- Khởi tạo Sao 3: Ghép 10 từ vựng theo thứ tự ---
+    s3Queue = shuffleArray(lv.words).slice(0, 10);
+    s3TargetIdx = 0;
+    setupStar3CurrentQuestion(lv);
+  }
+
+  function buildStar1Grid120(lv) {
+    const totalCells = 120; // 12 cột x 10 hàng dọc
+    const cells = [];
+
+    // Đảm bảo mỗi chữ trong hàng xuất hiện đúng 10 lần
+    s1Queue.forEach(chObj => {
+      for (let i = 0; i < 10; i++) {
+        cells.push({ k: chObj.k, found: false });
+      }
+    });
+
+    // Lấy các chữ nhiễu cùng loại bảng chữ
+    const allDistractors = [];
+    LEVELS.filter(x => x.stage === lv.stage).forEach(x => {
+      x.chars.forEach(c => {
+        if (!s1Queue.some(q => q.k === c.k)) allDistractors.push(c.k);
+      });
+    });
+
+    while (cells.length < totalCells) {
+      const randK = allDistractors[Math.floor(Math.random() * allDistractors.length)];
+      cells.push({ k: randK, found: false });
+    }
+
+    s1GridCells = shuffleArray(cells);
+  }
+
+  function setupStar2CurrentQuestion() {
+    const target = s2Queue[s2TargetIdx];
+    if (!target) return;
+    const needed = target.r.split('');
+    s2Slots = needed.map(() => null);
+
+    const extraLetters = ['a','i','u','e','o','k','s','t','n','h','m','y','r','w','c','f','g','j','b','p'];
+    const poolLetters = [...needed];
+    const shuffledExtra = shuffleArray(extraLetters);
+    for (const l of shuffledExtra) {
+      if (poolLetters.length >= needed.length + 5) break;
+      if (!poolLetters.includes(l)) poolLetters.push(l);
+    }
+    s2Pool = shuffleArray(poolLetters).map((ch, idx) => ({ id: idx, ch, used: false }));
+  }
+
+  function setupStar3CurrentQuestion(lv) {
+    const word = s3Queue[s3TargetIdx];
+    if (!word) return;
+    s3Slots = word.s.map(() => null);
+
+    // Khay chữ gồm đúng các chữ cần cho từ hiện tại + các chữ trong hàng
+    const poolChars = [...word.s];
+    const rowKanas = lv.chars.map(c => c.k);
+    shuffleArray(rowKanas).forEach(k => {
+      if (poolChars.length < word.s.length + 4) poolChars.push(k);
+    });
+
+    s3Pool = shuffleArray(poolChars).map((ch, idx) => ({ id: idx, ch, used: false }));
+  }
+
+  // =========================================================================
+  // 7. VẼ MÀN HÌNH BÀI HỌC TOÀN MÀN HÌNH & CẬP NHẬT DOM TỪNG PHẦN (KHÔNG NHÁY)
+  // =========================================================================
+  function renderLessonScreen() {
+    const lv = LEVELS.find(x => x.id === currentLevelId);
+    const stars = progress[currentLevelId];
+    const header = document.getElementById('center-header');
+    const scrollBox = document.getElementById('center-scroll');
+
+    header.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <button class="btn-outline" onclick="backToMap()">← Bản đồ</button>
+        <div class="map-title-badge">Ải ${lv.id}: ${lv.icon} (${lv.label})</div>
+        <button class="btn-outline" onclick="reshuffleCurrentLevel()">🔀 Xáo trộn lại</button>
+      </div>
+      <div class="star-nav-group">
+        <button class="star-tab-btn ${currentStarStep === 1 ? 'active' : (stars[0] ? 'done-star' : '')}" onclick="switchStarTab(1)">
+          ⭐ 1: Tìm chữ
+        </button>
+        <button class="star-tab-btn ${currentStarStep === 2 ? 'active' : (stars[1] ? 'done-star' : '')}" onclick="switchStarTab(2)">
+          ⭐ 2: Ghép âm
+        </button>
+        <button class="star-tab-btn ${currentStarStep === 3 ? 'active' : (stars[2] ? 'done-star' : '')}" onclick="switchStarTab(3)">
+          ⭐ 3: Ghép từ
+        </button>
+      </div>
+    `;
+
+    if (currentStarStep === 1) renderStar1Body(scrollBox);
+    else if (currentStarStep === 2) renderStar2Body(scrollBox);
+    else renderStar3Body(scrollBox);
+  }
+
+  // ------------------- SAO 1: TÌM CHỮ (120 Ô, MỖI CHỮ 10 LẦN) -------------------
+  function renderStar1Body(container) {
+    const target = s1Queue[s1TargetIdx];
+    let queueHtml = s1Queue.map((item, idx) => {
+      if (idx < s1TargetIdx) return ''; // Tìm xong biến mất khỏi hàng chờ
+      const cls = idx === s1TargetIdx ? 'q-chip current' : 'q-chip';
+      return `<div class="${cls}" id="s1-qchip-${idx}">#${idx + 1} ${item.k}</div>`;
+    }).join('');
+
+    let cellsHtml = s1GridCells.map((cell, idx) => `
+      <button class="find-cell ${cell.found ? 'found-vanished' : ''}" id="s1-cell-${idx}" onclick="clickStar1Cell(${idx})">
+        ${cell.found ? '' : cell.k}
+      </button>
+    `).join('');
+
+    container.innerHTML = `
+      <div class="lesson-wrapper">
+        <div class="task-banner">
+          <div>
+            <div class="task-banner-title" id="s1-banner-title">
+              NHIỆM VỤ SAO 1 ⭐ — TÌM LẦN LƯỢT TẤT CẢ CÁC CHỮ TRONG HÀNG (${s1TargetIdx + 1}/${s1Queue.length})
+            </div>
+            <div class="task-banner-sub">Mỗi chữ tìm đủ 10 ô trên bảng 120 ô. Tìm trúng ô nào chữ đó sẽ biến mất!</div>
+          </div>
+          <div class="badge-progress" id="s1-progress-badge">${s1FoundCount} / 10 ô</div>
+        </div>
+
+        <div class="prompt-box">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div>
+              <div style="font-size:11px;font-weight:800;color:#0f766e;">CHỮ ĐANG TÌM:</div>
+              <div style="font-size:38px;font-weight:900;line-height:1.1;" id="s1-current-kana">${target.k}</div>
+            </div>
+            <button class="btn-outline" onclick="speakJa(s1Queue[s1TargetIdx].k)">🔊 Nghe âm</button>
+          </div>
+          <div class="queue-chips" id="s1-queue-box">${queueHtml}</div>
+        </div>
+
+        <div class="find-grid-120">${cellsHtml}</div>
+      </div>
+    `;
+  }
+
+  function clickStar1Cell(idx) {
+    const cell = s1GridCells[idx];
+    const target = s1Queue[s1TargetIdx];
+    if (!cell || cell.found || !target) return;
+
+    const btn = document.getElementById(`s1-cell-${idx}`);
+    if (cell.k === target.k) {
+      cell.found = true;
+      s1FoundCount++;
+      speakJa(cell.k);
+
+      if (btn) {
+        btn.classList.add('found-vanished');
+        btn.textContent = '';
+      }
+      const badge = document.getElementById('s1-progress-badge');
+      if (badge) badge.textContent = `${s1FoundCount} / 10 ô`;
+
+      if (s1FoundCount >= 10) {
+        // Biến mất chữ vừa tìm xong và chuyển sang chữ tiếp theo
+        const doneChip = document.getElementById(`s1-qchip-${s1TargetIdx}`);
+        if (doneChip) doneChip.style.display = 'none';
+
+        if (s1TargetIdx + 1 < s1Queue.length) {
+          s1TargetIdx++;
+          s1FoundCount = 0;
+          const nextTarget = s1Queue[s1TargetIdx];
+          const nextChip = document.getElementById(`s1-qchip-${s1TargetIdx}`);
+          if (nextChip) nextChip.className = 'q-chip current';
+          document.getElementById('s1-current-kana').textContent = nextTarget.k;
+          document.getElementById('s1-banner-title').textContent =
+            `NHIỆM VỤ SAO 1 ⭐ — TÌM LẦN LƯỢT TẤT CẢ CÁC CHỮ TRONG HÀNG (${s1TargetIdx + 1}/${s1Queue.length})`;
+          document.getElementById('s1-progress-badge').textContent = `0 / 10 ô`;
+          speakJa(nextTarget.k);
+        } else {
+          // Hoàn thành Sao 1 -> Tự động chuyển sang Sao 2
+          progress[currentLevelId][0] = true;
+          saveProgress();
+          setTimeout(() => {
+            currentStarStep = 2;
+            renderLessonScreen();
+          }, 550);
+        }
+      }
+    } else {
+      if (btn) {
+        btn.classList.add('wrong-flash');
+        setTimeout(() => btn.classList.remove('wrong-flash'), 260);
+      }
+    }
+  }
+
+  // ------------------- SAO 2: GHÉP ÂM (CHỈ HIỆN KANA, CHỮ ĐÃ XONG BIẾN MẤT) -------------------
+  function renderStar2Body(container) {
+    const target = s2Queue[s2TargetIdx];
+    const queueHtml = s2Queue.map((item, idx) => {
+      if (idx < s2TargetIdx) return ''; // Chữ nào ghép xong biến mất luôn
+      const cls = idx === s2TargetIdx ? 'q-chip current' : 'q-chip';
+      return `<div class="${cls}" id="s2-qchip-${idx}">${item.k}</div>`;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="lesson-wrapper">
+        <div class="task-banner">
+          <div>
+            <div class="task-banner-title" id="s2-banner-title">
+              NHIỆM VỤ SAO 2 ⭐ — GHÉP ÂM ĐẦY ĐỦ CÁC CHỮ TRONG HÀNG (${s2TargetIdx + 1}/${s2Queue.length})
+            </div>
+            <div class="task-banner-sub">Bấm chữ cái bên dưới để ghép âm. Muốn xóa chữ nào chỉ cần bấm trực tiếp vào chữ đó trên ô!</div>
+          </div>
+          <div class="queue-chips" id="s2-queue-box">${queueHtml}</div>
+        </div>
+
+        <div class="prompt-box" style="justify-content:center;flex-direction:column;padding:28px 20px;">
+          <div style="display:flex;align-items:center;gap:16px;">
+            <div class="big-kana-card" id="s2-big-kana">${target.k}</div>
+            <button class="btn-outline" onclick="speakJa(s2Queue[s2TargetIdx].k)">🔊 Nghe âm</button>
+          </div>
+          <div class="slots-row" id="s2-slots-row" style="margin-top:14px;"></div>
+        </div>
+
+        <div>
+          <div style="font-size:12px;font-weight:800;color:#64748b;margin-bottom:6px;">
+            CHỌN TỪNG CHỮ CÁI ĐỂ GHÉP ÂM:
+          </div>
+          <div class="pool-row" id="s2-pool-row"></div>
+        </div>
+      </div>
+    `;
+
+    updateStar2InteractiveDOM();
+  }
+
+  function updateStar2InteractiveDOM() {
+    const slotsRow = document.getElementById('s2-slots-row');
+    const poolRow = document.getElementById('s2-pool-row');
+    if (!slotsRow || !poolRow) return;
+
+    slotsRow.innerHTML = s2Slots.map((slotObj, sIdx) => {
+      const plus = sIdx < s2Slots.length - 1 ? `<span style="font-weight:900;color:#94a3b8;">+</span>` : '';
+      if (slotObj) {
+        return `<button class="answer-slot filled" onclick="removeStar2Slot(${sIdx})">${slotObj.ch}</button>${plus}`;
+      }
+      return `<div class="answer-slot">?</div>${plus}`;
+    }).join('');
+
+    poolRow.innerHTML = s2Pool.map((pObj, pIdx) => `
+      <button class="pool-btn ${pObj.used ? 'used-hidden' : ''}" onclick="pickStar2Pool(${pIdx})">
+        ${pObj.ch}
+      </button>
+    `).join('');
+  }
+
+  function pickStar2Pool(pIdx) {
+    const item = s2Pool[pIdx];
+    if (!item || item.used) return;
+    const emptyIdx = s2Slots.findIndex(x => x === null);
+    if (emptyIdx === -1) return;
+
+    item.used = true;
+    s2Slots[emptyIdx] = item;
+    updateStar2InteractiveDOM();
+
+    // Kiểm tra khi đã điền đủ ô
+    if (s2Slots.every(x => x !== null)) {
+      const target = s2Queue[s2TargetIdx];
+      const userStr = s2Slots.map(x => x.ch).join('');
+      if (userStr === target.r) {
+        speakJa(target.k);
+        setTimeout(() => {
+          if (s2TargetIdx + 1 < s2Queue.length) {
+            s2TargetIdx++;
+            setupStar2CurrentQuestion();
+            renderStar2Body(document.getElementById('center-scroll'));
+          } else {
+            progress[currentLevelId][1] = true;
+            saveProgress();
+            currentStarStep = 3;
+            renderLessonScreen();
+          }
+        }, 450);
+      }
+    }
+  }
+
+  function removeStar2Slot(sIdx) {
+    const slotObj = s2Slots[sIdx];
+    if (!slotObj) return;
+    slotObj.used = false;
+    s2Slots[sIdx] = null;
+    updateStar2InteractiveDOM();
+  }
+
+  // ------------------- SAO 3: GHÉP 10 TỪ VỰNG TỪ ROMAJI THEO THỨ TỰ -------------------
+  function renderStar3Body(container) {
+    const word = s3Queue[s3TargetIdx];
+
+    const cardsHtml = s3Queue.map((w, idx) => {
+      const isDone = idx < s3TargetIdx;
+      const isCurrent = idx === s3TargetIdx;
+      const cardCls = isDone
+        ? 'word-item-card completed-word'
+        : (isCurrent ? 'word-item-card current-word' : 'word-item-card');
+
+      let badgeHtml = '';
+      if (isDone) {
+        badgeHtml = `<span class="word-status-badge" style="background:#042f2e;color:#fde047;">${w.s.join('')} ★ Đã xong</span>`;
+      } else if (isCurrent) {
+        badgeHtml = `<span class="word-status-badge" style="background:#0d9488;color:#fff;">Đang điền</span>`;
+      } else {
+        badgeHtml = `<span class="word-status-badge" style="color:#94a3b8;">Chờ lượt</span>`;
+      }
+
+      return `
+        <div class="${cardCls}" id="s3-wcard-${idx}">
+          <div>
+            <div class="word-romaji-title">#${idx + 1} ${w.r}</div>
+            <div class="word-meaning-sub">${w.m}</div>
+          </div>
+          ${badgeHtml}
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="lesson-wrapper">
+        <div class="task-banner">
+          <div>
+            <div class="task-banner-title" id="s3-banner-title">
+              NHIỆM VỤ SAO 3 ⭐ — GHÉP LẦN LƯỢT 10 TỪ VỰNG THEO THỨ TỰ (${s3TargetIdx + 1}/${s3Queue.length})
+            </div>
+            <div class="task-banner-sub">Bắt buộc điền đúng theo thứ tự từ #1 đến #10. Bấm vào chữ trên ô để trả về khay dưới!</div>
+          </div>
+          <div class="badge-progress" id="s3-progress-badge">${s3TargetIdx} / ${s3Queue.length} từ</div>
+        </div>
+
+        <div class="prompt-box">
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#0f766e;" id="s3-word-step-label">
+              TỪ SỐ ${s3TargetIdx + 1}/${s3Queue.length} ĐANG CHỈ ĐỊNH (ROMAJI):
+            </div>
+            <div style="margin-top:4px;">
+              <span style="font-size:32px;font-weight:900;" id="s3-prompt-romaji">${word.r}</span>
+              <span style="font-size:16px;font-weight:700;color:#475569;margin-left:8px;" id="s3-prompt-meaning">— ${word.m}</span>
+            </div>
+          </div>
+          <div class="slots-row" id="s3-slots-row"></div>
+        </div>
+
+        <div class="pool-row" id="s3-pool-row"></div>
+
+        <div class="words-grid-10" id="s3-words-grid">${cardsHtml}</div>
+      </div>
+    `;
+
+    updateStar3InteractiveDOM();
+  }
+
+  function updateStar3InteractiveDOM() {
+    const slotsRow = document.getElementById('s3-slots-row');
+    const poolRow = document.getElementById('s3-pool-row');
+    if (!slotsRow || !poolRow) return;
+
+    slotsRow.innerHTML = s3Slots.map((slotObj, sIdx) => {
+      if (slotObj) {
+        return `<button class="answer-slot filled" onclick="removeStar3Slot(${sIdx})">${slotObj.ch}</button>`;
+      }
+      return `<div class="answer-slot">?</div>`;
+    }).join('');
+
+    poolRow.innerHTML = s3Pool.map((pObj, pIdx) => `
+      <button class="pool-btn ${pObj.used ? 'used-hidden' : ''}" onclick="pickStar3Pool(${pIdx})">
+        ${pObj.ch}
+      </button>
+    `).join('');
+  }
+
+  function pickStar3Pool(pIdx) {
+    const item = s3Pool[pIdx];
+    if (!item || item.used) return;
+    const emptyIdx = s3Slots.findIndex(x => x === null);
+    if (emptyIdx === -1) return;
+
+    item.used = true;
+    s3Slots[emptyIdx] = item;
+    speakJa(item.ch);
+    updateStar3InteractiveDOM();
+
+    if (s3Slots.every(x => x !== null)) {
+      const targetWord = s3Queue[s3TargetIdx];
+      const userKana = s3Slots.map(x => x.ch).join('');
+      const expectedKana = targetWord.s.join('');
+
+      if (userKana === expectedKana) {
+        speakJa(expectedKana);
+        const lv = LEVELS.find(x => x.id === currentLevelId);
+        setTimeout(() => {
+          if (s3TargetIdx + 1 < s3Queue.length) {
+            s3TargetIdx++;
+            setupStar3CurrentQuestion(lv);
+            renderStar3Body(document.getElementById('center-scroll'));
+          } else {
+            // Đạt đủ 3 Sao -> Tự động về Bản đồ chữ cái ngay tại vị trí ải vừa qua
+            progress[currentLevelId][2] = true;
+            saveProgress();
+            centerMode = 'map';
+            renderCenter();
+          }
+        }, 480);
+      }
+    }
+  }
+
+  function removeStar3Slot(sIdx) {
+    const slotObj = s3Slots[sIdx];
+    if (!slotObj) return;
+    slotObj.used = false;
+    s3Slots[sIdx] = null;
+    updateStar3InteractiveDOM();
+  }
+
+  // =========================================================================
+  // 8. MÃ CHUYỂN MÁY (ĐỒNG BỘ TIẾN ĐỘ)
+  // =========================================================================
+  function openSyncModal() {
+    const encoded = 'NHG-' + btoa(encodeURIComponent(JSON.stringify(progress)));
+    document.getElementById('export-code-box').value = encoded;
+    document.getElementById('sync-modal').classList.add('open');
+  }
+
+  function closeSyncModal() {
+    document.getElementById('sync-modal').classList.remove('open');
+  }
+
+  function copySyncCode() {
+    const box = document.getElementById('export-code-box');
+    box.select();
+    document.execCommand('copy');
+    alert('Đã copy Mã tiến độ! Bạn có thể gửi mã này sang máy khác.');
+  }
+
+  function applySyncCode() {
+    const raw = document.getElementById('import-code-box').value.trim();
+    if (!raw.startsWith('NHG-')) {
+      alert('Mã không hợp lệ (phải bắt đầu bằng NHG-)!');
+      return;
+    }
+    try {
+      const parsed = JSON.parse(decodeURIComponent(atob(raw.slice(4))));
+      LEVELS.forEach(lv => {
+        if (Array.isArray(parsed[lv.id])) progress[lv.id] = parsed[lv.id];
+      });
+      saveProgress();
+      closeSyncModal();
+      renderCenter();
+      alert('Đã nạp tiến độ thành công!');
+    } catch (e) {
+      alert('Không thể đọc mã tiến độ, vui lòng kiểm tra lại!');
+    }
+  }
+
+  // Khởi chạy ngay lập tức
+  loadSavedProgress();
+  updateTotalStarsUI();
+  renderLeftAlphabet();
+  renderRightCard();
+  renderCenter();
+</script>
+</body>
+</html>
